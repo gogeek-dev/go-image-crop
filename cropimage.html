@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<title>Golang Crop Image</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script src="file/js/functions.js"></script>
+
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="file/css/style.css">
+	<link rel="stylesheet" href="file/css/responsive.css">
+	<!-- cropper js -->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.js"></script>
+
+
+	<style>
+		.w-100 {
+			max-width: 100%;
+			/* This rule is very important, please do not ignore this! */
+		}
+	</style>
+</head>
+
+<body>
+	<div class="upload-wrap">
+		<h2>Upload your File</h2>
+
+
+		<div class="add-file flex">
+
+			<input type="file" name="img[]" class="file-upload-default" id="cropperImageUpload" required>
+
+			<h3 class="flex"> <img src="file/img/clip.svg"> <span>Add files</span> or drop files here </h3>
+		</div>
+
+		<button class="ripple submit" id="change-profile-pic">Submit</button>
+	</div>
+
+
+	<div id="profile_pic_modal" class="modal fade">
+
+		<div class="modal-dialog">
+			<div class="modal-content" style="width: 100%;">
+
+				<div class="modal-header">
+					<h3>Crop Image</h3>
+
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+						onClick="window.location.reload();">&times;</button>
+
+				</div>
+
+				<div class="modal-body">
+
+					<img src="" class="w-100" id="croppingImage" alt="">
+                         <br>
+					<button class="btn btn-primary crop mb-2 mb-md-0">Show Crop</button>
+					<br>
+					</br>
+					<div class="col-md-4 ml-auto">
+						<h6>Cropped Image: </h6>
+						<img class="w-100 cropped-img" src="#" alt="">
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal"
+						onClick="window.location.reload();">Close</button>
+
+					<div class="btn btn-primary">
+
+						<a href="javascript:;" class="save">Crop&Save</a>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<script type="text/javascript">
+		$(function () {
+			'use strict';
+
+			var croppingImage = document.querySelector('#croppingImage'),
+				img_w = document.querySelector('.img-w'),
+				cropBtn = document.querySelector('.crop'),
+				croppedImg = document.querySelector('.cropped-img'),
+				saveBtn = document.querySelector('.save'),
+				upload = document.querySelector('#cropperImageUpload'),
+				// imge = document.querySelector(".saing")
+				cropper = '';
+
+			$('.file-upload-browse').on('click', function (e) {
+				var file = $(this).parent().parent().parent().find('.file-upload-default');
+				file.trigger('click');
+			});
+
+			cropper = new Cropper(croppingImage);
+
+			// on change show image with crop options
+			upload.addEventListener('change', function (e) {
+				$(this).parent().find('.form-control').val($(this).val().replace(/C:\\fakepath\\/i, ''));
+				if (e.target.files.length) {
+					cropper.destroy();
+					// start file reader
+					const reader = new FileReader();
+					reader.onload = function (e) {
+						if (e.target.result) {
+							croppingImage.src = e.target.result;
+							cropper = new Cropper(croppingImage);
+						}
+					};
+					reader.readAsDataURL(e.target.files[0]);
+				}
+			});
+
+			// crop on click
+			cropBtn.addEventListener('click', function (e) {
+				e.preventDefault();
+				// get result to data uri
+				let imgSrc = cropper.getCroppedCanvas({
+					width: 300 // input value
+
+
+				}).toDataURL();
+
+				croppedImg.src = imgSrc;
+				saveBtn.setAttribute('href', imgSrc);
+
+
+			});
+
+			// save on click
+			saveBtn.addEventListener('click', function (e) {
+				e.preventDefault();
+				// get result to data uri
+				let imgSrc = cropper.getCroppedCanvas({
+					//width: img_w.value // input value
+					width: 300 // input value
+				}).toDataURL();
+
+
+				//post base64 image data to saveCroppedPhoto function then redirect to the /cropped directory show the actual file
+				$.post("/savecroppedphoto", { data: imgSrc }, function () { location.replace("/imagelist") });
+
+			});
+
+		});
+	</script>
+
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+</body>
+
+</html>

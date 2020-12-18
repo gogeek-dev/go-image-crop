@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title> Image List </title>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+		integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+	<link rel="stylesheet" href="file/css/style1.css">
+	<link rel="stylesheet" href="file/css/responsive.css">
+
+</head>
+
+<body>
+
+	<div class="page-wrapper">
+		<div class="maximus">
+			<div class="title flex">
+				<h2> Images Available in database</h2>
+				<div class="flex ie-btns">
+					<a href="/" class="flex ripple add-ph"> <img src="file/img/add-photo.svg"> Add </a>
+				</div>
+			</div>
+			<!-- title -->
+			<div class="table-responsive">
+				<table class="table table-list table-list-img">
+					<thead>
+						<tr>
+							<th>Serial Number</th>
+							<th>Cropped Image</th>
+							<th width="60%">File Name</th>
+						</tr>
+					</thead>
+					{{ range .}}
+					<tbody>
+
+						<tr>
+							<td>{{ .ID }}</td>
+							<td>
+								<div class="img-box">
+									<img src="{{.Path}}" width="100px" height="100px">
+									<a href="{{ .Path}}"> <img src="file/img/view.svg"> </a>
+								</div>
+							</td>
+							<td>{{ .FileName }}</td>
+						</tr>
+
+
+					</tbody>
+					{{ end }}
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<!-- JS -->
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+
+</body>
+
+</html>
