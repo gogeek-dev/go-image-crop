@@ -5,22 +5,31 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"path/filepath"
 	"text/template"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 )
 
 func dbConns() (db *sql.DB) {
-	dbDriver := "mysql"
-	dbUser := "root"
-	dbPass := "welcome123$"
-	dbName := "goblog"
+	er := godotenv.Load(".env")
+
+	if er != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	dbDriver := os.Getenv("DB_DRIVER")
+	dbUser := os.Getenv("DB_USERNAME")
+	dbPass := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
 	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
 	if err != nil {
 		panic(err.Error())
 	}
+
 	return db
 }
 
@@ -66,9 +75,9 @@ func savefile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func cropimage(w http.ResponseWriter, r *http.Request) {
+func addcrop(w http.ResponseWriter, r *http.Request) {
 
-	t, _ := template.ParseFiles("cropimage.html")
+	t, _ := template.ParseFiles("templates/cropimage.html")
 	t.Execute(w, nil)
 }
 
@@ -94,20 +103,20 @@ func imagelist(w http.ResponseWriter, r *http.Request) {
 
 		res = append(res, img)
 	}
-	t, _ := template.ParseFiles("imglist.html")
+	t, _ := template.ParseFiles("templates/imglist.html")
 	t.Execute(w, res)
 	defer db.Close()
 }
 
 func main() {
 
-	http.HandleFunc("/", cropimage)
+	http.HandleFunc("/", imagelist)
 	http.HandleFunc("/savecroppedphoto", savefile)
-	http.HandleFunc("/imagelist", imagelist)
+	http.HandleFunc("/addcrop", addcrop)
 	http.Handle("/cropped_image/", http.StripPrefix("/cropped_image/", http.FileServer(http.Dir("cropped_image"))))
 
-	http.Handle("/file/", http.StripPrefix("/file/", http.FileServer(http.Dir("file"))))
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("assets"))))
 
-	fmt.Println("listening on http://localhost:8080")
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("listening on http://localhost:8090")
+	http.ListenAndServe(":8090", nil)
 }

@@ -6,13 +6,13 @@
 	<title>Golang Crop Image</title>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="file/js/functions.js"></script>
+	<script src="assets/js/functions.js"></script>
 
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
 		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<link rel="stylesheet" href="file/css/style.css">
-	<link rel="stylesheet" href="file/css/responsive.css">
+	<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/responsive.css">
 	<!-- cropper js -->
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.css" rel="stylesheet">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.6/cropper.min.js"></script>
@@ -35,7 +35,7 @@
 
 			<input type="file" name="img[]" class="file-upload-default" id="cropperImageUpload" required>
 
-			<h3 class="flex"> <img src="file/img/clip.svg"> <span>Add files</span> or drop files here </h3>
+			<h3 class="flex"> <img src="assets/img/clip.svg"> <span>Add files</span> or drop files here </h3>
 		</div>
 
 		<button class="ripple submit" id="change-profile-pic">Submit</button>
@@ -146,7 +146,7 @@
 
 
 				//post base64 image data to saveCroppedPhoto function then redirect to the /cropped directory show the actual file
-				$.post("/savecroppedphoto", { data: imgSrc }, function () { location.replace("/imagelist") });
+				$.post("/savecroppedphoto", { data: imgSrc }, function () { location.replace("/") });
 
 			});
 
